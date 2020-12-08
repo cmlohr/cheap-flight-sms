@@ -31,9 +31,26 @@ for dest in sheet_data:
         to_time = six_months
     )
 
+    if flight is None:
+        continue
+
     if flight.price < dest["lowestPrice"]:
         notify.send_message(
             message=f"PRICE ALERT! ${flight.price} to {flight.dest_city}-{flight.dest_air}, from {flight.out_date}."
         )
 
+    if flight.price < dest["lowestPrice"]:
+        user_list = data_manager.get_user()
+        user_emails = [row["email"] for row in user_data]
+        name = [row["firstName"] for row in user_data]
+        message = f"PRICE ALERT! ${flight.price} to {flight.dest_city}-{flight.dest_air}, from {flight.out_date}."
+
+
+        if flight.stop_over > 0:
+            message += f"\nFlight has {flight.stop_overs} stop over, via {flight.via_city}."
+            print(message)
+
+        google_link = f"https://www.google.com/flights?hl=en#flt={flight.origin_air}.{flight.dest_air}.{flight.out_date}*{flight.dest_air}.{flight.origin_air}.{flight.return_date}"
+        # notify.send_message(message) commenting out turns off sms
+        notify.send_email(user_emails, message, google_link)
 

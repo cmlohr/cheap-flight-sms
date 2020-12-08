@@ -1,7 +1,7 @@
 import requests
 
 SHEET_END = "_YOUR_SHEETY_END_POINT_"
-
+USER_END = "_YOUR_SHEETY_END_POINT_"
 # get sheety
 
 
@@ -29,3 +29,9 @@ class DataManager:
                 json=new_code,
             )
             print(response.text)
+
+    def get_user(self):
+        response = requests.get(url=USER_END)
+        confirmed_users = response.json()
+        self.user_data = confirmed_users["users"]
+        return self.user_data
